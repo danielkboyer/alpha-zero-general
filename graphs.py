@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+import logging
+
+log = logging.getLogger(__name__)
 class Graph():
     
     def __init__(self):
@@ -8,6 +11,7 @@ class Graph():
         self.percents = [0]
 
     def add_iteration(self,percentBetter):
+        log.info("Percent Better than previous ="+str(percentBetter))
         self.iteration+=1
         better = percentBetter-50
         if better < 0:
@@ -27,11 +31,11 @@ def main():
     g = Graph()
     g.add_iteration(65)
     g.save_plot()
-    g.add_iteration(80)
+    g.add_iteration(67)
     g.save_plot()
-    g.add_iteration(5)
+    g.add_iteration(68)
     g.save_plot()
-    g.add_iteration(34)
+    g.add_iteration(62)
     g.save_plot()
 if __name__ == "__main__":
     main()

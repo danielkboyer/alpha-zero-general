@@ -120,7 +120,8 @@ class Coach():
                           lambda x: np.argmax(nmcts.getActionProb(x, temp=0)), self.game)
             pwins, nwins, draws = arena.playGames(self.args.arenaCompare)
 
-            self.graphing.add_iteration(float(nwins)/(pwins+nwins))
+            
+            self.graphing.add_iteration((float(nwins)/float(pwins+nwins))*100)
             self.graphing.save_plot()
             log.info('NEW/PREV WINS : %d / %d ; DRAWS : %d' % (nwins, pwins, draws))
             if pwins + nwins == 0 or float(nwins) / (pwins + nwins) < self.args.updateThreshold:
