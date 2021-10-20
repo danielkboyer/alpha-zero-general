@@ -11,6 +11,7 @@ from tqdm import tqdm
 from Arena import Arena
 from MCTS import MCTS
 
+from graphs import Graph
 log = logging.getLogger(__name__)
 
 
@@ -28,6 +29,7 @@ class Coach():
         self.mcts = MCTS(self.game, self.nnet, self.args)
         self.trainExamplesHistory = []  # history of examples from args.numItersForTrainExamplesHistory latest iterations
         self.skipFirstSelfPlay = False  # can be overriden in loadTrainExamples()
+        self.graphing = Graph()
 
     def executeEpisode(self):
         """
@@ -118,6 +120,8 @@ class Coach():
                           lambda x: np.argmax(nmcts.getActionProb(x, temp=0)), self.game)
             pwins, nwins, draws = arena.playGames(self.args.arenaCompare)
 
+            self.graphing.add_iteration(float(nwins)/(pwins+nwins))
+            self.graphing.save_plot()
             log.info('NEW/PREV WINS : %d / %d ; DRAWS : %d' % (nwins, pwins, draws))
             if pwins + nwins == 0 or float(nwins) / (pwins + nwins) < self.args.updateThreshold:
                 log.info('REJECTING NEW MODEL')
